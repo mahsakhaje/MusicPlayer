@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return MusicFragment.newInstance();
                 case 1:
-                    return MusicFragment.newInstance();
+                    return AlbumFragment.newInstance();
                 case 2:
                     return MusicFragment.newInstance();
             }

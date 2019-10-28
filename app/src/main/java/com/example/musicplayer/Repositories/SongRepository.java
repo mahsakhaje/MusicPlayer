@@ -13,6 +13,7 @@ import com.example.musicplayer.model.Music;
 public class SongRepository {
     private static  SongRepository instance ;
     List<Music> musicList;
+    List<String> albums;
 
     public static SongRepository getInstance() {
         if (instance == null)
@@ -22,9 +23,17 @@ public class SongRepository {
 
     private SongRepository() {
         musicList = new ArrayList<>();
+        albums=new ArrayList<>();
     }
     public List<Music> getMusicList(){
         return musicList;
+    }
+    public List<String> getMusicsAlbum(){
+        for (Music music:musicList){
+            if(!albums.contains(music.getAlbum()))
+            albums.add(music.getAlbum());
+        }
+        return albums;
     }
     public void addMusic(Music music){
         musicList.add(music);
