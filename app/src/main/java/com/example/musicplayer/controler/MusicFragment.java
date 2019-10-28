@@ -1,4 +1,4 @@
-package com.example.musicplayer;
+package com.example.musicplayer.controler;
 
 
 import android.os.Bundle;
@@ -14,10 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.musicplayer.R;
+import com.example.musicplayer.Repositories.SongRepository;
+import com.example.musicplayer.model.Music;
+
 import java.util.List;
 
-import Repositories.SongRepository;
-import model.Music;
 
 
 /**
@@ -80,13 +82,14 @@ public class MusicFragment extends Fragment {
     private class MusicAdapter extends RecyclerView.Adapter<MusicHolder> {
         List<Music> musicList;
 
+        public MusicAdapter(List<Music> musicList) {
+            this.musicList=musicList;
+        }
+
         public void setMusicList(List<Music> list) {
             musicList = list;
         }
 
-        MusicAdapter(List<Music> list) {
-            musicList = list;
-        }
 
         @NonNull
         @Override

@@ -1,4 +1,6 @@
-package Repositories;
+package com.example.musicplayer.Repositories;
+
+import com.example.musicplayer.model.Music;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,7 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import model.Music;
+import com.example.musicplayer.model.Music;
 
 public class SongRepository {
     private static  SongRepository instance ;

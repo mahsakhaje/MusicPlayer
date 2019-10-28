@@ -1,4 +1,4 @@
-package model;
+package com.example.musicplayer.model;
 
 public class Music {
     private Long id;

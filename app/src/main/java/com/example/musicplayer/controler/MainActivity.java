@@ -1,4 +1,4 @@
-package com.example.musicplayer;
+package com.example.musicplayer.controler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,10 +24,12 @@ import android.os.CancellationSignal;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.example.musicplayer.controler.MusicFragment;
+import com.example.musicplayer.R;
+import com.example.musicplayer.Repositories.SongRepository;
+import com.example.musicplayer.model.Music;
 import com.google.android.material.tabs.TabLayout;
 
-import Repositories.SongRepository;
-import model.Music;
 
 public class MainActivity extends AppCompatActivity {
     public static final int count_pages = 3;
