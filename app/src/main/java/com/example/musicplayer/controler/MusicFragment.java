@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,8 @@ import com.example.musicplayer.R;
 import com.example.musicplayer.Repositories.SongRepository;
 import com.example.musicplayer.model.Music;
 
+import java.io.IOException;
 import java.util.List;
-
 
 
 /**
@@ -64,32 +65,48 @@ public class MusicFragment extends Fragment {
     }
 
     private class MusicHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView artist;
+        private TextView title;
+        private TextView artist;
+        private Music mMusic;
 
         public MusicHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.textView_music_title);
             artist = itemView.findViewById(R.id.textView_music_artist);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ControlMusic controlMusic = new ControlMusic();
+
+                    try {
+                        controlMusic.stop();
+                        controlMusic.play(mMusic, getActivity());
+                    } catch (IOException e) {
+                        Log.d("tag", "problem in playing");
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
 
         public void bind(Music music) {
+            mMusic = music;
             title.setText(music.getTitle());
             artist.setText(music.getArtist());
         }
     }
 
     private class MusicAdapter extends RecyclerView.Adapter<MusicHolder> {
-        List<Music> musicList;
+        private List<Music> musicList;
 
         public MusicAdapter(List<Music> musicList) {
-            this.musicList=musicList;
+            this.musicList = musicList;
         }
 
         public void setMusicList(List<Music> list) {
             musicList = list;
         }
-
 
         @NonNull
         @Override
@@ -100,7 +117,7 @@ public class MusicFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull MusicHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final MusicHolder holder, final int position) {
             holder.bind(musicList.get(position));
         }
 

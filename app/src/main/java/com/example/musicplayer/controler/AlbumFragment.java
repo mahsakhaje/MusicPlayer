@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.musicplayer.R;
 import com.example.musicplayer.Repositories.SongRepository;
+import com.example.musicplayer.model.Music;
 
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class AlbumFragment extends Fragment {
         recyclerView = v.findViewById(R.id.recycler_music);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         repository = SongRepository.getInstance();
-        adapter = new AlbumAdapter(repository.getMusicsAlbum());
+        adapter = new AlbumAdapter(repository.getMusicList());
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -64,20 +65,21 @@ public class AlbumFragment extends Fragment {
             artistName = itemView.findViewById(R.id.artist_name_textView);
         }
 
-        public void bind(String album) {
-            albumName.setText(album);
+        public void bind(Music music) {
+            albumName.setText(music.getAlbum());
+            songImgView.setImageBitmap(music.getBitmap());
         }
     }
 
     public class AlbumAdapter extends RecyclerView.Adapter<AlbumViewHolder> {
-        List<String> albumList;
+        List<Music> albumList;
 
-        public AlbumAdapter(List<String> albumlist) {
+        public AlbumAdapter(List<Music> albumlist) {
             this.albumList = albumlist;
 
         }
 
-        public void setAdapter(List<String> list) {
+        public void setAdapter(List<Music> list) {
             albumList = list;
 
 

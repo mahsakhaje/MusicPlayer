@@ -14,9 +14,11 @@ import androidx.viewpager.widget.ViewPager;
 import android.Manifest;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -112,8 +114,10 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void getSongs() {
 
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-
+        Uri musiUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Uri albumUri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
+        Cursor cursor_music = null;
+        Cursor cursor_album = null;
         if (Build.VERSION.SDK_INT < 26) {
             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -128,33 +132,49 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
-        Cursor cursor = null;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            cursor = getContentResolver().query(uri, null, null, null);
+
+            cursor_music = getContentResolver().query(musiUri, null, null, null);
+
         } else {
 
 
-            cursor = getContentResolver().query(uri, null, null, null, null, null);
+            cursor_music = getContentResolver().query(musiUri, null, null, null, null, null);
         }
+        // cursor_album = getContentResolver().query(albumUri, null, null, null, null, null);
 
-        if (cursor.getCount() != 0) {
+        if (cursor_music.getCount() != 0 && cursor_music != null) {
+
+
             int i = 0;
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
+            cursor_music.moveToFirst();
+            while (!cursor_music.isAfterLast()) {
+                Long albumId = cursor_music.getLong(cursor_music.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                cursor_album = getContentResolver().query(albumUri, new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
+                        MediaStore.Audio.Albums._ID + "=" + albumId,
+                        null,
+                        null);
 
-                Long id = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                String album=cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                SongRepository.getInstance().addMusic(new Music(id, title, artist,album));
-                if(SongRepository.getInstance().getMusicList().size()>0){
-                Log.d(TAG, "music :" + SongRepository.getInstance().getMusicList().get(i).getTitle());
-                i++;}
-                cursor.moveToNext();
-
+                if (cursor_album != null && cursor_album.moveToFirst()) {
+                    Long id = cursor_music.getLong(cursor_music.getColumnIndex(MediaStore.Audio.Media._ID));
+                    String picpath = cursor_album.getString(cursor_album.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                    String title = cursor_music.getString(cursor_music.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                    String artist = cursor_music.getString(cursor_music.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                    String album = cursor_music.getString(cursor_music.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                    Uri uri1 = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
+                    SongRepository.getInstance().addMusic(new Music(id, title, artist, album, uri1, picpath));
+                    if (SongRepository.getInstance().getMusicList().size() > 0) {
+                        Log.d(TAG, "music :" + SongRepository.getInstance().getMusicList().get(i).getTitle());
+                        i++;
+                    }
+                    // cursor_album.moveToNext();
+                }
+                cursor_music.moveToNext();
             }
-            cursor.close();
+            cursor_album.close();
         }
+        cursor_music.close();
 
 
     }
