@@ -4,14 +4,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Music {
+import java.io.Serializable;
+
+public class Music implements Serializable {
     private Long id;
     private String title;
     private String artist;
     private String album;
     private Uri uri;
     private String picPath;
+    int duration;
  //   private Bitmap bitmap;
 
     public Uri getUri() {
@@ -33,13 +38,19 @@ public class Music {
         return album;
     }
 
-    public Music(Long id, String title, String artist, String album, Uri uri, String picPath) {
+    public int getDuration() {
+        return duration;
+    }
+
+    public Music(Long id, String title, String artist, String album, Uri uri, String picPath, int duration) {
         this.picPath = picPath;
         this.uri = uri;
         this.id = id;
         this.title = title;
         this.artist = artist;
         this.album = album;
+
+        this.duration=duration;
      //   this.bitmap = bitmap;
     }
 
@@ -54,4 +65,6 @@ public class Music {
     public String getArtist() {
         return artist;
     }
+
+
 }

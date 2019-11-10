@@ -20,6 +20,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
@@ -45,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        RetriveData retriveData = new RetriveData();
+//        retriveData.execute();
+
+
         getSongs();
         viewPager = findViewById(R.id.container_viewpager);
 
@@ -111,9 +116,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //    public class RetriveData extends AsyncTask {
+//
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//            getSongs();
+//            return null;
+//        }
+//    }
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void getSongs() {
-
+        Long id;
+        String picpath;
+        String title;
+        String artist;
+        String album;
+        int duration;
         Uri musiUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Uri albumUri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
         Cursor cursor_music = null;
@@ -122,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 String[] per = {Manifest.permission.READ_EXTERNAL_STORAGE};
-                Log.d(TAG, "music aded" + "<26");
+                Log.d(MainActivity.TAG, "music aded" + "<26");
 
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -145,11 +163,14 @@ public class MainActivity extends AppCompatActivity {
         // cursor_album = getContentResolver().query(albumUri, null, null, null, null, null);
 
         if (cursor_music.getCount() != 0 && cursor_music != null) {
-
-
+            int idColumn = cursor_music.getColumnIndex(MediaStore.Audio.Media._ID);
+            int titleColumn = cursor_music.getColumnIndex(MediaStore.Audio.Media.TITLE);
+            int artistColumn = cursor_music.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+            int albumColumn = cursor_music.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+            int columnDuration = cursor_music.getColumnIndex(MediaStore.Audio.Media.DURATION);
             int i = 0;
             cursor_music.moveToFirst();
-            while (!cursor_music.isAfterLast()) {
+            while (!cursor_music.isAfterLast() && i < 100) {
                 Long albumId = cursor_music.getLong(cursor_music.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
                 cursor_album = getContentResolver().query(albumUri, new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
                         MediaStore.Audio.Albums._ID + "=" + albumId,
@@ -157,17 +178,21 @@ public class MainActivity extends AppCompatActivity {
                         null);
 
                 if (cursor_album != null && cursor_album.moveToFirst()) {
-                    Long id = cursor_music.getLong(cursor_music.getColumnIndex(MediaStore.Audio.Media._ID));
-                    String picpath = cursor_album.getString(cursor_album.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
-                    String title = cursor_music.getString(cursor_music.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                    String artist = cursor_music.getString(cursor_music.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                    String album = cursor_music.getString(cursor_music.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                    id = cursor_music.getLong(idColumn);
+                    picpath = cursor_album.getString(cursor_album.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                    title = cursor_music.getString(titleColumn);
+                    artist = cursor_music.getString(artistColumn);
+                    album = cursor_music.getString(albumColumn);
+                    duration = cursor_music.getInt(columnDuration);
                     Uri uri1 = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
-                    SongRepository.getInstance().addMusic(new Music(id, title, artist, album, uri1, picpath));
-                    if (SongRepository.getInstance().getMusicList().size() > 0) {
-                        Log.d(TAG, "music :" + SongRepository.getInstance().getMusicList().get(i).getTitle());
-                        i++;
-                    }
+
+
+                    SongRepository.getInstance().addMusic(new Music(id, title, artist, album, uri1, picpath, duration));
+                    i++;
+//                    if (SongRepository.getInstance().getMusicList().size() > 0) {
+//                        Log.d(MainActivity.TAG, "music :" + SongRepository.getInstance().getMusicList().get(i).getTitle());
+//                        i++;
+//                    }
                     // cursor_album.moveToNext();
                 }
                 cursor_music.moveToNext();
@@ -178,5 +203,4 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 }

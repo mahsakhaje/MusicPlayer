@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.musicplayer.R;
 import com.example.musicplayer.Repositories.SongRepository;
 import com.example.musicplayer.model.Music;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -67,7 +68,8 @@ public class AlbumFragment extends Fragment {
 
         public void bind(Music music) {
             albumName.setText(music.getAlbum());
-            songImgView.setImageBitmap(music.getBitmap());
+          songImgView.setImageBitmap(music.getBitmap());
+            //Picasso.get().load(music.getPicPath()).into(songImgView);
         }
     }
 

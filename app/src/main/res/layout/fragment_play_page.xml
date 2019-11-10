@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controler.PlayPageFragment"
+    android:background="#DAD9D9"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image_music_play_fragment"
+        android:orientation="horizontal"
+        >
+
+
+        <LinearLayout
+            android:layout_marginTop="40dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:textSize="20sp"
+                android:textColor="#000"
+                android:id="@+id/textView_title_music_play_page"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="50dp">
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/repeat"
+
+                    android:background="@drawable/repeat_image"
+                    android:layout_marginRight="60dp"
+
+                    />
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/preve"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/back_image" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/pause_image" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/next_image" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/shuffle"
+                    android:background="@drawable/shuffle_image"
+                    android:layout_marginLeft="60dp"/>
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+
+                android:id="@+id/seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_margin="30dp"
+
+                />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_music_play_fragment"
+        android:layout_width="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="250dp"
+        android:layout_marginTop="10dp"
+        android:layout_margin="15dp"
+
+        android:background="@drawable/music_image" />
+
+</RelativeLayout>
